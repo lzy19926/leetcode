@@ -1,5 +1,6 @@
 
-
+//  扫描法, 将每个格子进行扫描  
+// 用描边-数组占用的格子数       
 var trap = function (height) {
     // 计算最高值并计算height数组之和
     let maxHeight = 0
