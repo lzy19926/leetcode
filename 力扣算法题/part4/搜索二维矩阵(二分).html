@@ -29,6 +29,18 @@
             return -1;
         }
 
+
+        var searchMatrix = function (matrix, target) {
+            for (const row of matrix) {
+                const index = search(row, target);
+                if (index >= 0) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+
     </script>
 </body>
 

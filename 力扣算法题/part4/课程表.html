@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+
+        // 拓扑排序  向量图法
+        var canFinish = function (numCourses, prerequisites) {
+            // 构建hash表保存每个节点的入度
+            let orMap = {}
+            let initNodeList = []
+            let i = 0
+            let res = true
+            while (i < numCourses) {
+                orMap[i] = 0
+                initNodeList.push(i)
+                i++
+            }
+
+            // 遍历数组,生成节点入度
+            prerequisites.forEach(arr => {
+                orMap[arr[0]]++
+            });
+
+            // 检查所有节点入度是否都为零
+            const checkRes = () => {
+                for (let key in orMap) {
+                    if (orMap[key] !== 0) return false
+                }
+                return true
+            }
+
+            // 遍历leftNode,进行BFS遍历
+            // BFS遍历: 一遍遍历,如果有其他满足条件的结果,添加节点到list尾部,增加遍历数组长度
+            const handler = (nodeList) => {
+
+                if (checkRes()) return
+
+                let newNodeList = [] // 本轮剩余的节点
+
+                for (let i = 0; i < nodeList.length; i++) {
+                    let v = nodeList[i]
+                    if (orMap[v] === 0) {
+                        let res = prerequisites.filter(arr => arr[1] === v)// 一个完成的节点可对应多个节点
+                        res.forEach(arr => {
+                            // 减少目标的入度
+                            if (orMap[arr[0]] > 0) {
+                                orMap[arr[0]]--
+                            }
+                            // 如果目标入度减为0, 则在数组最后再添加一项,再次执行
+                            orMap[arr[0]] === 0 && newNodeList.push(arr[0])
+                        })
+                    }
+                }
+
+                // 如果本轮生成了其他可执行节点,继续执行
+                if (newNodeList.length > 0) {
+                    handler(newNodeList)
+                }
+            }
+
+            handler(initNodeList)
+
+            console.log(orMap);
+
+            return checkRes()
+        };
+
+        
+        console.log(canFinish(4, [[2, 0], [1, 0], [3, 1], [3, 1], [1, 3]]));
+    </script>
+</body>
+
+</html>
