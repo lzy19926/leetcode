@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        // 先分别找到节点p,q的所有组件  构建数组  再找到最近的公共祖先(超时)
+        var lowestCommonAncestor = function (root, p, q) {
+
+            let res1
+            let res2
+
+            const deep = (node, path) => {
+                if (!node) return
+
+                if (node.val === p) {
+                    res1 = [...path, node.val]
+                    return
+                } else {
+                    deep(node.left, [...path, node.val])
+                    deep(node.right, [...path, node.val])
+                }
+
+            }
+
+            console.log(res1);
+        };
+
+
+
+        var lowestCommonAncestor = function (root, p, q) {
+
+
+            const deep = (root) => {
+                if (!root) return null
+                if (root === q || root === p) return root
+
+
+                let right = deep(root.right)
+                let left = depp(root.left)
+
+                if (right && left) {
+                    return root
+                } else if (right && !left) {
+                    return right
+                } else if (!right && left) {
+                    return left
+                }
+            }
+
+            return deep(root)
+        }
+
+
+    </script>
+</body>
+
+</html>
