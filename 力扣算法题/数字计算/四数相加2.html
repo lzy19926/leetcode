@@ -17,12 +17,23 @@
 
         var fourSumCount = function (A, B, C, D) {
             const countAB = new Map();
-            A.forEach(u => B.forEach(v => countAB.set(u + v, (countAB.get(u + v) || 0) + 1)));
+
+            // 遍历A,B  保存两数合到map中
+            A.forEach(a =>
+                B.forEach(b => {
+                    let sum1 = a + b
+                    countAB.set(sum1, (countAB.get(sum1) || 0) + 1)
+                }
+                )
+            );
+
+            // 遍历C,D 判断map是否有值,使得sum1+sum2 =0
             let ans = 0;
-            for (let u of C) {
-                for (let v of D) {
-                    if (countAB.has(-u - v)) {
-                        ans += countAB.get(-u - v);
+            for (let c of C) {
+                for (let d of D) {
+                    let sum2 = -(c + d)
+                    if (countAB.has(sum2)) {
+                        ans += countAB.get(sum2);
                     }
                 }
             }
