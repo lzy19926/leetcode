@@ -19,13 +19,12 @@
             const countAB = new Map();
 
             // 遍历A,B  保存两数合到map中
-            A.forEach(a =>
-                B.forEach(b => {
+            for (let a of A) {
+                for (let b of B) {
                     let sum1 = a + b
                     countAB.set(sum1, (countAB.get(sum1) || 0) + 1)
                 }
-                )
-            );
+            }
 
             // 遍历C,D 判断map是否有值,使得sum1+sum2 =0
             let ans = 0;
