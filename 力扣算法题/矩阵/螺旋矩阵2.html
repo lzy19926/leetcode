@@ -43,6 +43,8 @@
                 for (y; y < n; y++) {
                     matrix[y][x] = cur
                     cur++
+                    // 最终终止点
+                    if (cur == max) break
                     // 检查下一个
                     if (shouldTurn(x, y + 1)) {
                         goLeft(x - 1, y)
@@ -55,6 +57,8 @@
                 for (x; x >= 0; x--) {
                     matrix[y][x] = cur
                     cur++
+                    // 最终终止点
+                    if (cur == max) break
                     // 检查下一个
                     if (shouldTurn(x - 1, y)) {
                         goUp(x, y - 1)
@@ -67,6 +71,8 @@
                 for (y; y >= 0; y--) {
                     matrix[y][x] = cur
                     cur++
+                    // 最终终止点
+                    if (cur == max) break
                     // 检查下一个
                     if (shouldTurn(x, y - 1)) {
                         goRight(x + 1, y)
