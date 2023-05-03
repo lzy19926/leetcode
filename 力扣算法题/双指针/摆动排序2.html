@@ -11,12 +11,14 @@
 <body>
     <script>
 
+        // https://leetcode.cn/problems/wiggle-sort-ii/description/?favorite=2ckc81c
+
+
         // 给你一个整数数组 nums，将它重新排列成 nums[0] < nums[1] > nums[2] < nums[3]...的顺序。
 
         // 你可以假设所有输入数组都可以得到满足题目要求的结果。
 
         // 比如 1 4 1 3 1 2, 符合题意
-
 
         // 方案一  双指针逐个插入
         //                  |     |
@@ -25,6 +27,8 @@
         // 左右两个指针依次向前进行插入
 
         // !!!需要将两个指针放置在右侧 
+
+
         var wiggleSort = function (nums) {
             const arr = nums.slice();
             arr.sort((a, b) => a - b);
@@ -44,8 +48,6 @@
                 left--
                 right--
             }
-
-
         };
 
         wiggleSort([1, 5, 1, 1, 6, 4, 1])
