@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        // 分隔链表
+        //https://leetcode.cn/problems/partition-list/?envType=study-plan-v2&id=top-interview-150
+
+        // 1 4 2 3 2 5 2   标记3, 将链表分割为
+
+        // 小于3     大于3
+        // 1 2 2 2 | 4 3 5   
+
+
+        // 方案
+        // 遍历链表, 将>=3的节点组成链表 4 3 5
+        // 从原链表中删去这些元素, 1 2 2 2
+        // 最后拼接起来
+
+        var partition = function (head, x) {
+            if (!head) return head
+
+            // 遍历链表 组成一大一小两个新链表
+            let biggerHead = null
+            let biggerFoot = null
+            let smallHead = null
+            let smallFoot = null
+            let cur = head
+
+            while (cur) {
+                // 拼接到大链表中
+                if (cur.val >= x) {
+                    if (!biggerHead) {
+                        biggerHead = cur
+                        biggerFoot = cur
+                    } else {
+                        biggerFoot.next = cur
+                        biggerFoot = cur // 更新大链表尾部
+                    }
+                }
+                // 拼接到小链表中
+                if (cur.val < x) {
+                    if (!smallHead) {
+                        smallHead = cur
+                        smallFoot = cur
+                    } else {
+                        smallFoot.next = cur
+                        smallFoot = cur // 更新小链表尾部
+                    }
+                }
+                // 将cur从原始链表中切除
+                let prevCur = cur
+                cur = cur.next
+                prevCur.next = null
+            }
+
+            // 拼接两个链表,返回小链表头部 判断特殊情况
+            if (smallHead) {
+                smallFoot.next = biggerHead
+                return smallHead
+            }
+            else {
+                return biggerHead
+            }
+        };
+
+    </script>
+</body>
+
+</html>
