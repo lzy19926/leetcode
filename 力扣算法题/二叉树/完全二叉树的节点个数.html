@@ -19,35 +19,32 @@
 
 
 
+
+        // 遍历每个节点,检查左右深度,如果深度一样则是完美二叉树,直接返回2^n
         var countNodes = function (root) {
-            // 遍历每个节点,检查左右深度,如果深度一样则是完美二叉树,直接返回2^n
+            if (root == null) return 0
 
+            let lH, rH = 0;
+            let lNode, rNode = root;
 
-            const countNodes = (root) => {
-                if (root == null) return 0
-
-                let lH, rH = 0;
-                let lNode, rNode = root;
-
-                // 计算左边的深度
-                while (lNode) {
-                    lH++;
-                    lNode = lNode.left;
-                }
-                // 计算右边深度
-                while (rNode) {
-                    rH++;
-                    rNode = rNode.right;
-                }
-
-                // 如果深度相同 直接返回计算结果
-                if (lH == rH) return 2 ** lH - 1;
-
-                // 否则计算左右子树的节点数  +1 为根节点
-                return 1 + countNodes(root.left) + countNodes(root.right);
+            // 计算左边的深度
+            while (lNode) {
+                lH++;
+                lNode = lNode.left;
+            }
+            // 计算右边深度
+            while (rNode) {
+                rH++;
+                rNode = rNode.right;
             }
 
-        };
+            // 如果深度相同 直接返回计算结果
+            if (lH == rH) return 2 ** lH - 1;
+
+            // 否则计算左右子树的节点数  +1 为根节点
+            return 1 + countNodes(root.left) + countNodes(root.right);
+        }
+
     </script>
 </body>
 
