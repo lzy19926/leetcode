@@ -14,13 +14,10 @@
         // 106.  从中序与前序遍历序列构造二叉树  
         // 106.  从中序与后序遍历序列构造二叉树
 
-
         // https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/description/?envType=study-plan-v2&id=top-interview-150
-
 
         // 给出一个二叉树的 前序-中序  中序-后序遍历序列,  构造返回这颗二叉树的head
         // preorder = [3,9,20,15,7], inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
-
 
         // 中序遍历特性:   根节点的左右两边分别是左右子树
         // 前序遍历特性:   第一个节点是root
@@ -35,8 +32,6 @@
 
 
         // 每次将后序序列的最后一位弹出, 就是下一个子树的root节点
-
-
 
         var buildTree = function (inorder, postorder) {
 
