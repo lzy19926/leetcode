@@ -14,7 +14,7 @@
 
 var longestOnes = function (nums, k) {
     // 边界判断
-    if (k > nums.length - 1) return nums.length
+    if (k >= nums.length) return nums.length
 
     let left = 0
     let right = 0
@@ -29,7 +29,6 @@ var longestOnes = function (nums, k) {
         if (nums[right] == 0) {
             zeroCount++
         }
-
         // 移动指针后0数量超过, 则左指针持续收缩,直至0数量正常
         if (zeroCount > k) {
             while (zeroCount > k) {
