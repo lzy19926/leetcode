@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        let g = navigator.geolocation
+        let position = g.getCurrentPosition((p) => {
+            console.log(p);
+        })
+
+        navigator.getBattery().then((b) => console.log(b));
+
+        let itemsHtml = "";
+        for (let value of values) {
+            itemsHtml += '<li>${value}</li>';
+        }
+        ul.innerHTML = itemsHtml;
+
+
+    </script>
+</body>
+
+</html>
