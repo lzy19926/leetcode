@@ -61,4 +61,109 @@
     });
 </script>
 
+<!-- <script>
+
+    async function* chars() {
+        const decodedText = 'foo';
+        for (let char of decodedText) {
+            yield await new Promise((resolve) => setTimeout(resolve, 1000, char));
+        }
+    }
+
+    const decodedTextStream = new ReadableStream({
+        async start(controller) {
+            for await (let chunk of chars()) {
+                controller.enqueue(chunk);
+            }
+            controller.close();
+        }
+    });
+
+
+    const encodedTextStream = decodedTextStream.pipeThrough(new TextEncoderStream());
+    const readableStreamDefaultReader = encodedTextStream.getReader();
+
+
+
+    (async function () {
+        while (true) {
+            const { done, value } = await readableStreamDefaultReader.read();
+            if (done) {
+                break;
+            } else {
+                console.log(value);
+            }
+        }
+    })();
+
+
+
+    const rf = new FileReader()
+    rf.readAsText(file, encoding)  // 读取为text
+    rf.readAsDataURL(file, encoding)// 读取数据的URI
+    rf.readAsArrayBuffer(file, encoding)// 读取为二进制
+    rf.readAsBinaryString(file, encoding) // 读取为BinaryString
+</script> -->
+<!-- <script>
+
+
+    // 每秒钟推入一个整数到可读流中 
+    // start方法接收一个流控制器
+    async function start(controller) {
+        let i = 0;
+        let timer = setInterval(() => {
+            // 将整数入队
+            controller.enqueue(i);
+            i++
+            // 关闭流控制器
+            if (i > 5) {
+                clearInterval(timer)
+                controller.close();
+            }
+        }, 1000)
+    }
+
+    // 创建流
+    const stream_1 = new ReadableStream({
+        start
+    });
+    // 通过转换流 读取chunk 乘二后重新入流
+    const stream_2 = new TransformStream({
+        transform(chunk, controller) {
+            controller.enqueue(chunk * 2);
+        }
+    })
+
+    // 通过管道连接两个流 
+    const pipedStream = stream_1.pipeThrough(stream_2);
+    // 从连接流的输出获得读取器
+    const pipedStreamReader = pipedStream.getReader();
+
+
+    // 持续读取流
+    while (true) {
+        const { done, value } = await pipedStreamReader.read();
+    }
+
+
+
+
+    (async function () {
+        while (true) {
+            const { done, value } = await pipedStreamReader.read();
+            if (done) {
+                break;
+            } else {
+                console.log(value); // 输出0 2 4 6 8 10
+            }
+        }
+    })()
+
+
+</script> -->
+
+
+<script>
+</script>
+
 </html>
