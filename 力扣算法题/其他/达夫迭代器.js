@@ -1,15 +1,12 @@
-
-const times = 5_000
-
+const times = 5_000_000_000
 
 function process() {
-    return 1 + 2 + 3
+    return 1 + 2
 }
-
 function daff_1(times) {
 
-    let iterations = Math.floor(times / 8);
-    let leftover = times % 8;
+    let iterations = Math.floor(times / 32);
+    let leftover = times % 32;
     // 循环第一部分
     if (leftover > 0) {
         do {
@@ -26,9 +23,33 @@ function daff_1(times) {
         process();
         process();
         process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
+        process();
     } while (--iterations > 0);
 
-
+}
 function daff_2(times) {
     let iterations = Math.ceil(times / 8);
     let startAt = times % 8;
@@ -61,8 +82,3 @@ console.timeEnd("Daff Iterator");
 console.time("Daff Iterator+");
 daff_1(times)
 console.timeEnd("Daff Iterator+");
-
-
-
-
-

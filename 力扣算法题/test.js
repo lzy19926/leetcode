@@ -2,7 +2,7 @@
 const times = 5_000_000_000
 
 function process() {
-    return Math.random() * 0.567 * 0.874
+    return 1 + 2
 }
 function daff_1(times) {
 
