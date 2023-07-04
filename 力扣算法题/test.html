@@ -9,161 +9,26 @@
 </head>
 
 <body>
-    <iframe id="richedit" name="richedit" style="height: 200px; width: 200px"></iframe>
-    <button id="btn">修改选中字体</button>
+    <script>
+
+
+        function app() {
+            const context = {
+                data: "123"
+            }
+
+            document.addEventListener("keydown", (e) => {
+                console.log(context.data);
+                console.log(e);
+            })
+
+        }
+
+
+        app()
+
+
+    </script>
 </body>
-
-
-
-
-
-<script>
-    // 创建一个富文本编辑框
-    window.addEventListener("load", () => {
-        frames["richedit"].document.designMode = "on";
-    });
-    const doc = frames["richedit"].document
-
-    // 富文本插入span
-    const span = doc.createElement("span")
-    span.innerText = "12345"
-    doc.body.appendChild(span)
-
-    // 编写修改样式按钮
-    const btn = document.getElementById('btn');
-
-    btn.addEventListener("click", (e) => {
-        // 创建选择range 设置要选取的区域  span中文本节点的0-2个字符
-        const range = doc.createRange();
-        range.setStart(span.firstChild, 0);
-        range.setEnd(span.firstChild, 2);
-
-        // 创建一个selecton对象  选择对象
-        var selection = frames["richedit"].getSelection();
-        selection.removeAllRanges();
-
-        // 添加range到选择对象中  此时12字符被选中(蓝色背景)
-        selection.addRange(range);
-        // 执行commend  修改字符size 
-        doc.execCommand("fontSize", false, 6);
-    })
-</script>
-
-
-<script>
-
-    const frame = document.getElementById('richedit');
-
-    frame.addEventListener("load", () => {
-
-
-
-    });
-</script>
-
-<!-- <script>
-
-    async function* chars() {
-        const decodedText = 'foo';
-        for (let char of decodedText) {
-            yield await new Promise((resolve) => setTimeout(resolve, 1000, char));
-        }
-    }
-
-    const decodedTextStream = new ReadableStream({
-        async start(controller) {
-            for await (let chunk of chars()) {
-                controller.enqueue(chunk);
-            }
-            controller.close();
-        }
-    });
-
-
-    const encodedTextStream = decodedTextStream.pipeThrough(new TextEncoderStream());
-    const readableStreamDefaultReader = encodedTextStream.getReader();
-
-
-
-    (async function () {
-        while (true) {
-            const { done, value } = await readableStreamDefaultReader.read();
-            if (done) {
-                break;
-            } else {
-                console.log(value);
-            }
-        }
-    })();
-
-
-
-    const rf = new FileReader()
-    rf.readAsText(file, encoding)  // 读取为text
-    rf.readAsDataURL(file, encoding)// 读取数据的URI
-    rf.readAsArrayBuffer(file, encoding)// 读取为二进制
-    rf.readAsBinaryString(file, encoding) // 读取为BinaryString
-</script> -->
-<!-- <script>
-
-
-    // 每秒钟推入一个整数到可读流中 
-    // start方法接收一个流控制器
-    async function start(controller) {
-        let i = 0;
-        let timer = setInterval(() => {
-            // 将整数入队
-            controller.enqueue(i);
-            i++
-            // 关闭流控制器
-            if (i > 5) {
-                clearInterval(timer)
-                controller.close();
-            }
-        }, 1000)
-    }
-
-    // 创建流
-    const stream_1 = new ReadableStream({
-        start
-    });
-    // 通过转换流 读取chunk 乘二后重新入流
-    const stream_2 = new TransformStream({
-        transform(chunk, controller) {
-            controller.enqueue(chunk * 2);
-        }
-    })
-
-    // 通过管道连接两个流 
-    const pipedStream = stream_1.pipeThrough(stream_2);
-    // 从连接流的输出获得读取器
-    const pipedStreamReader = pipedStream.getReader();
-
-
-    // 持续读取流
-    while (true) {
-        const { done, value } = await pipedStreamReader.read();
-    }
-
-
-
-
-    (async function () {
-        while (true) {
-            const { done, value } = await pipedStreamReader.read();
-            if (done) {
-                break;
-            } else {
-                console.log(value); // 输出0 2 4 6 8 10
-            }
-        }
-    })()
-
-
-</script> -->
-
-
-<script>
-</script>
 
 </html>
