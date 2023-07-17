@@ -34,8 +34,6 @@ var isValid = function (s) {
     return !stack.length
 };
 
-
-
 // 方案一: 生成左括号,右括号组成的二叉树, 记录path进行校验
 var generateParenthesis = function (n) {
 
@@ -66,7 +64,5 @@ var generateParenthesis = function (n) {
     debugger
     return res
 };
-
-
 
 generateParenthesis(3)
