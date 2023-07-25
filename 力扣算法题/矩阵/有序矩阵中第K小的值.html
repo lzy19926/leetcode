@@ -59,6 +59,134 @@
             return low;
         };
 
+
+        // 方案三: 
+        // 从上查找每行末尾, 排除小于target的行
+        // 从下查找每行头部, 排除大于target的行
+        // 其余行进行二分查找
+
+        var searchMatrix = function (matrix, target) {
+
+            let n = matrix.length - 1
+            if (n == -1) return false
+            let m = matrix[0].length - 1
+            if (m == -1) return false
+
+            let res = false
+            let start = 0
+            let end = n
+            // 查找开头行
+            while (start < n) {
+                if (matrix[start][m] == target) {
+                    res = true
+                    break
+                }
+                if (matrix[start][m] > target) {
+                    break
+                }
+                start++
+            }
+            while (end > 0) {
+                if (matrix[end][0] == target) {
+                    res = true
+                    break
+                }
+                if (matrix[end][0] < target) {
+                    break
+                }
+                end--
+            }
+            if (res) return res
+
+
+            // 第二次缩小范围
+            // [2, 5, 8, 12, 19],
+            // [3, 6, 9, 16, 22],
+            // [10, 13, 14, "17", 24],
+
+            let s = 0
+            let e = m
+            while (s < m) {
+                if (matrix[end][s] == target) {
+                    res = true
+                    break
+                }
+                if (matrix[end][s] > target) {
+                    break
+                }
+                s++
+            }
+            while (e > 0) {
+                if (matrix[start][e] == target) {
+                    res = true
+                    break
+                }
+                if (matrix[start][e] < target) {
+                    break
+                }
+                e--
+            }
+            if (res) return res
+
+            // 此时获得矩阵 y=[start,end]  x=[s,e] ,进行查找
+            for (let y = start; y <= end; y++) {
+                for (let x = s; x <= e; x++) {
+                    if (matrix[y][x] == target) {
+                        res = true
+                        break
+                    }
+                }
+            }
+
+            return res
+        };
+
+        const m = [
+            [1, 4, 7, 11, 15],
+            [2, 5, 8, 12, 19],
+            [3, 6, 9, 16, 22],
+            [10, 13, 14, 17, 24],
+            [18, 21, 23, 26, 30]
+        ]
+
+        searchMatrix(m, 16)
+
+
+        // 方案四:
+        // 直接进行二分查找
+
+        var searchMatrix = function (matrix, target) {
+            let n = matrix.length - 1
+            if (n == -1) return false
+
+            let res = false
+
+            for (let i = 0; i <= n; i++) {
+                if (search(matrix[i], target) !== -1) {
+                    res = true
+                    break
+                }
+            }
+
+            return res
+        }
+
+        const search = (nums, target) => {
+            let low = 0, high = nums.length - 1;
+            while (low <= high) {
+                const mid = Math.floor((high - low) / 2) + low;
+                const num = nums[mid];
+                if (num === target) {
+                    return mid;
+                } else if (num > target) {
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
+            }
+            return -1;
+        }
+
     </script>
 </body>
 

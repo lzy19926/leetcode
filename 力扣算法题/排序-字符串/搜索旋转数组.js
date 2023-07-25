@@ -39,3 +39,19 @@ var search = function (arr, target) {
     }
     return arr[right] == target ? right : -1
 };
+
+
+
+// 讲道理也不是很慢  但是数组过长时差距会很明显 
+var search = function (arr, target) {
+    let res = -1
+
+    for (let i = 0; i < arr.length; i++) {
+        if (target == arr[i]) {
+            res = i
+            break
+        }
+    }
+
+    return res
+}
