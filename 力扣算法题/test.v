@@ -18,3 +18,14 @@ Case 2
   jmp .L4  ; 执行操作,否则跳转到L4
 Default case
 .L4 
+
+
+
+
+int aluA = [
+    icode in  { IRRMOVL，IOPL } : valA;
+    icode in { IIRMOVL，IRMMOVL，IMRMOVL}: valC;
+    icode in { ICALL， IPUSHL}: -4;
+    icode in { IRET，IPOPL } : 4;
+    # Other instructions dont need ALU
+];
