@@ -1,3 +1,10 @@
+<!--
+ * @Author: Luzy
+ * @Date: 2023-04-29 22:39:38
+ * @LastEditors: Luzy
+ * @LastEditTime: 2023-08-15 12:22:54
+ * @Description: 
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,117 +18,65 @@
 <body>
     <script>
 
+        // 字符串转换整数 (atoi)
+        // https://leetcode.cn/problems/string-to-integer-atoi/solutions/185648/javascriptzi-dong-ji-guan-fang-ti-jie-de-xiang-xi-/?favorite=2ckc81c&orderBy=most_votes&languageTags=javascript
 
-        // C/C++中的 atoi函数逻辑
-        // 
 
-        var myAtoi = function (s) {
 
-            let isBlank = s => s == ' '
-            let isOperator = s => ["-", "+"].indexOf(s) != -1
-            let isNumber = s => ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].indexOf(s) != -1
-            let isOther = s => !isNumber(s) && !isOperator(s) && !isBlank(s)
-            let startIndex = 0
-            let isPlus = true
-            let resString = ''
+        // 自动机类
+        class Automaton {
+            constructor() {
+                // 执行阶段，默认处于开始执行阶段
+                this.state = 'start';
+                // 正负符号，默认是正数
+                this.sign = 1;
+                // 数值，默认是0
+                this.answer = 0;
 
-            // 找到第一个非0的数字
-            for (let i = 0; i < s.length; i++) {
-
-                if (s[i] == "0") continue
-                // 第一个是字母 直接返回0
-                if (isOther(s[i]) && !resString) return 0
-
-                // 第一个是操作符  且下一个不是数字  返回0
-                if (isOperator(s[i]) && !isNumber(s[i + 1])) return 0
-
-                if (isNumber(s[i])) {
-                    startIndex = i
-                    resString += s[i]
-                    break
-                }
+                this.map = new Map([
+                    ['start', ['start', 'signed', 'in_number', 'end']],
+                    ['signed', ['end', 'end', 'in_number', 'end']],
+                    ['in_number', ['end', 'end', 'in_number', 'end']],
+                    ['end', ['end', 'end', 'end', 'end']]
+                ])
             }
 
-            // 检查正负号
-            if (s[startIndex - 1] == "-") { isPlus = false }
-
-            // 开始数字扫描
-            let cur = startIndex + 1
-            while (cur < s.length) {
-                if (isNumber(s[cur])) {
-                    resString += s[cur]
-                } else {
-                    break
-                }
-                cur++
+            // 获取字符类型
+            getType(char) {
+                // 空格
+                if (char === ' ') return 0;
+                // 正负号
+                else if (char === '-' || char === '+') return 1;
+                // 整数
+                else if (typeof Number(char) === 'number' && !isNaN(char)) return 2;
+                // 其他
+                else return 3;
             }
 
-            // 边界判断
-            if (!resString) return 0
-            let res = isPlus ? parseInt(resString) : -parseInt(resString)
-            if (res > 2147483647) return 2147483647
-            if (res < -2147483647) return -2147483647
-            return res
-        };
+            // 字符转换执行函数
+            get(char) {
+                const type = this.getType(char)
+                this.state = this.map.get(this.state)[type];
 
-
+                if (this.state === 'in_number') {
+                    // 当下一个状态是in_number  添加一位数字
+                    this.answer = this.answer * 10 + (char - 0);
+                    // 适配32位机型  解决数字溢出问题  负数需要-1
+                    this.answer = this.sign === 1
+                        ? Math.min(this.answer, Math.pow(2, 31) - 1)
+                        : Math.min(this.answer, -Math.pow(-2, 31));
+                    // 更改符号
+                } else if (this.state === 'signed') {
+                    this.sign = char === '+' ? 1 : -1;
+                }
+            }
+        }
 
         // 使用表驱动  自动机完成
         var myAtoi = function (str) {
-            // 自动机类
-            class Automaton {
-                constructor() {
-                    // 执行阶段，默认处于开始执行阶段
-                    this.state = 'start';
-                    // 正负符号，默认是正数
-                    this.sign = 1;
-                    // 数值，默认是0
-                    this.answer = 0;
 
-                    this.map = new Map([
-                        ['start', ['start', 'signed', 'in_number', 'end']],
-                        ['signed', ['end', 'end', 'in_number', 'end']],
-                        ['in_number', ['end', 'end', 'in_number', 'end']],
-                        ['end', ['end', 'end', 'end', 'end']]
-                    ])
-                }
-
-                // 获取状态的索引
-                getIndex(char) {
-                    if (char === ' ') {
-                        // 空格判断
-                        return 0;
-                    } else if (char === '-' || char === '+') {
-                        // 正负判断
-                        return 1;
-                    } else if (typeof Number(char) === 'number' && !isNaN(char)) {
-                        // 数值判断
-                        return 2;
-                    } else {
-                        // 其他情况
-                        return 3;
-                    }
-                }
-
-                // 字符转换执行函数
-                get(char) {
-                    this.state = this.map.get(this.state)[this.getIndex(char)];
-
-                    if (this.state === 'in_number') {
-                        this.answer = this.answer * 10 + (char - 0);
-                        this.answer = this.sign === 1
-                            ? Math.min(this.answer, Math.pow(2, 31) - 1)
-                            : Math.min(this.answer, -Math.pow(-2, 31));
-                    } else if (this.state === 'signed') {
-                        this.sign = char === '+' ? 1 : -1;
-                    }
-                }
-            }
-
-            // 生成自动机实例
             let automaton = new Automaton();
 
-            // 遍历每个字符 依次进行转换
             for (let char of str) {
                 automaton.get(char);
             }
