@@ -9,17 +9,6 @@
 
 async function parseLogParam() {
 
-    // 差异化success与error
-    if ('success') {
-        ctx.logParam.state = 'success';
-    }
-    else if ('fail') {
-        ctx.logParam.state = 'fail';
-        ctx.logParam.error = {
-            message: errMsg,
-            code: errorCode,
-        };
-    }
 
 
     const requestAddress = ctx.ip.split(':');
