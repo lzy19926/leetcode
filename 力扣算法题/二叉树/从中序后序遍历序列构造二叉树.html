@@ -11,7 +11,7 @@
 <body>
     <script>
 
-        // 106.  从中序与前序遍历序列构造二叉树  
+        // 106.  从中序与前序遍历序列构造二叉树
         // 106.  从中序与后序遍历序列构造二叉树
 
         // https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/description/?envType=study-plan-v2&id=top-interview-150
@@ -25,13 +25,20 @@
 
         // 比如上面的树 根节点为3
         // 中序遍历      9  [3]  15-20-7     3的左右两边分别是左右子数
-        // 左右两边同理   20的左右两边也是左右子树  
+        // 左右两边同理   20的左右两边也是左右子树
 
 
         // inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
 
 
         // 每次将后序序列的最后一位弹出, 就是下一个子树的root节点
+
+
+        function TreeNode(val, left, right) {
+            this.val = (val === undefined ? 0 : val)
+            this.left = (left === undefined ? null : left)
+            this.right = (right === undefined ? null : right)
+        }
 
         var buildTree = function (inorder, postorder) {
 

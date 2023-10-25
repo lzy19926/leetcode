@@ -1,0 +1,87 @@
+<!--
+ * @Author: Luzy
+ * @Date: 2023-10-25 11:08:11
+ * @LastEditors: Luzy
+ * @LastEditTime: 2023-10-25 11:59:17
+ * @Description:
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        // 判断数组postorder是否为是否为二叉搜索树的后序遍历结果
+
+        // 对于序列 [4,6,5,9,8]
+        // 8为根节点  然后判断拆分[4 6 5] [9]  判断是否为合法搜索树
+        // 寻找第一个大于根节点的元素i  i左边是左子树  i右边是右子树
+
+
+        var verifyTreeOrder = function (postorder) {
+
+            let root = postorder.pop()
+            let res = true
+
+            const deep = (root, postorder) => {
+
+                if (!res) return
+                if (!postorder.length) return // 叶子节点
+                if (postorder.length == 1) return // 只有一个子节点
+                // 找到第一个大于root的值
+                let firstBiggerIdx = -1
+
+                for (let i = 0; i < postorder.length; i++) {
+                    if (postorder[i] > root) {
+                        firstBiggerIdx = i
+                        break
+                    }
+                }
+
+                // 划分为左右子数两个区间
+                let left, right
+
+                if (firstBiggerIdx == -1) {
+                    left = postorder
+                    right = []
+                } else {
+                    left = postorder.slice(0, firstBiggerIdx)
+                    right = postorder.slice(firstBiggerIdx)
+                }
+
+                // 检查左子节点
+                if (left.length) {
+                    let leftNode = left.pop()
+                    if (!(leftNode < root)) return res = false
+                    deep(leftNode, left)
+                }
+
+                // 检查右子节点
+                if (right.length) {
+                    let rightNode = right.pop()
+                    if (!(rightNode > root)) return res = false
+                    deep(rightNode, right)
+                }
+
+            }
+
+            deep(root, postorder)
+            return res
+        };
+
+        // verifyTreeOrder([4, 6, 5, 9, 8])// true
+        // verifyTreeOrder([4, 9, 6, 9, 8])// false
+        debugger
+        console.log(verifyTreeOrder([1, 2, 3, 4, 5]));// false
+
+
+    </script>
+</body>
+
+</html>
