@@ -1,5 +1,4 @@
-
-
+//! 阶段三 使用类封装单个perf计算逻辑  并使用多态区分多个不同种类戏剧计算逻辑
 // 一个计算电影院收入的函数 输入电影列表  售票情况
 // --------------
 // 大剧院账单
@@ -20,11 +19,9 @@ const invoice = {
     ]
 }
 
-
 const playFor = (performance) => {
     return plays[performance.playID]
 }
-
 const CNY = (number) => {
     return new Intl.NumberFormat("ch", {
         style: "currency", currency: "CNY",
@@ -33,16 +30,15 @@ const CNY = (number) => {
 }
 const accumulateVolumeCredits = (performance) => {
     return performance
-        .reduce((total, p) => total + getVolumeCredits(p), 0)//TODO 使用reduce代替循环
+        .reduce((total, p) => total + p.volumeCredits, 0)
 }
 const accumulateAmount = (performance) => {
     return performance
-        .reduce((total, p) => total + p.amount, 0)//TODO 使用reduce代替循环
+        .reduce((total, p) => total + p.amount, 0)
 }
 const formatLine = (pref) => {
     return `${pref.play.name}:${CNY(pref.amount / 100)} (${pref.audience} 座位)\n`
 }
-
 
 // 分离步骤 将其分为计算账单数据, 渲染为HTML两部分
 function renderPlainText(data) {
@@ -62,8 +58,7 @@ function renderPlainText(data) {
 
 // 将计算逻辑封装到类PerformanceCaculator里
 const enrichPreformance = (performance) => {
-    const caculator = new PerformanceCaculator(performance, playFor(performance))
-
+    const caculator = createPerformanceCaculator(performance, playFor(performance))
     const result = Object.assign({}, performance)
     result.play = caculator.play
     result.amount = caculator.getAmount()
@@ -84,6 +79,8 @@ function statement(invoice) {
 }
 
 
+
+
 // 通过创建类封装逻辑 用于计算一个performance,(通过play计算完整的perf对象)
 class PerformanceCaculator {
     constructor(performance, play) {
@@ -92,39 +89,53 @@ class PerformanceCaculator {
     }
 
     getAmount() {
-        let thisAmount = 0
-        let audience = this.performance.audience
-
-        switch (this.play.type) {
-            case "tragedy":
-                thisAmount = 40000
-                if (audience > 30) {
-                    thisAmount += 1000 * (audience - 30)
-                }
-                break;
-            case "comedy":
-                thisAmount = 30000
-                if (audience > 30) {
-                    thisAmount += 1000 * (audience - 30)
-                }
-                break;
-            default:
-                throw new Error("UNKNOW TYPE")
-        }
-
-        return thisAmount
+        throw new Error("method getAmount must be init in subClass")
     }
 
     getVolumeCredits() {
-        let volumeCredits = 0
-        volumeCredits += Math.max(this.performance.audience - 30, 0)
-
-        if ("comedy" === this.play.type) {
-            volumeCredits += Math.max(this.performance.audience - 30, 0)
-        }
-        return volumeCredits
+        throw new Error("method getAmount must be init in subClass")
     }
 }
+// 多态化多个计算器子类
+class TragedyCaculator extends PerformanceCaculator {
+    getAmount() {
+        let amount = 40000
+        let audience = this.performance.audience
+        if (audience > 30) {
+            amount += 1000 * (audience - 30)
+        }
+        return amount
+    }
+
+    getVolumeCredits() {
+        return Math.max(this.performance.audience - 30, 0)
+    }
+}
+class ComedyCaculator extends PerformanceCaculator {
+    getAmount() {
+        let amount = 30000
+        let audience = this.performance.audience
+        if (audience > 30) {
+            amount += 1000 * (audience - 30)
+        }
+        return amount
+    }
+
+    getVolumeCredits() {
+        return Math.max(this.performance.audience - 30, 0)
+    }
+}
+// 通过工厂函数 管理多个计算器子类
+function createPerformanceCaculator(performance, play) {
+    switch (play.type) {
+        case "tragedy": return new TragedyCaculator(performance, play);
+        case "comedy": return new ComedyCaculator(performance, play);
+        default:
+            throw new Error(`unknow type ${play.type}`)
+    }
+}
+
+
 
 // 测试
 console.log(statement(invoice));
