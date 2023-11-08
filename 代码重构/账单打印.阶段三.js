@@ -79,8 +79,6 @@ function statement(invoice) {
 }
 
 
-
-
 // 通过创建类封装逻辑 用于计算一个performance,(通过play计算完整的perf对象)
 class PerformanceCaculator {
     constructor(performance, play) {
