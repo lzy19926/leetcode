@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+
+        // 1. 记录已经走过的点, 如果走到相同节点,直接退出
+        // 2. 构建树结构,递归
+
+
+        var wordPuzzle = function (grid, target) {
+
+            let res = false;
+
+            const originGrid = JSON.parse(JSON.stringify(grid));
+
+            // 找到所有的起始字母(用于优化)
+            let firstLitter = []
+            for (let y = 0; y < grid.length; y++) {
+                for (let x = 0; x < grid[0].length; x++) {
+                    if (target[0] === grid[y][x]) {
+                        if (!res) {
+                            check(x, y, 0, [])
+                        }
+                    }
+                }
+
+            }
+
+            // 根据起始字母构建树(递归) x,y为坐标,i为查询字母的下标
+            // 遍历起始字母,进行查找, 找到直接返回true
+            function check(x, y, i, points) {
+                // 判断次点是否合法 退出时还原原矩阵
+                if (x < 0 || y < 0) {
+                    grid = JSON.parse(JSON.stringify(originGrid));
+                    return false
+                }
+                // 走到之前走过的节点时退出
+                if (grid[y][x] == "") {
+                    grid = JSON.parse(JSON.stringify(originGrid));
+                    return false
+                }
+
+                let curLitter = grid?.[y]?.[x]
+                let litter = target[i]
+
+                if (curLitter && litter && curLitter === litter) {
+                    // 修改矩阵
+                    grid[y][x] = ""
+                    // 检查是否走完
+                    if (i >= target.length) {
+                        grid = JSON.parse(JSON.stringify(originGrid));
+                        res = true;
+                        return
+                    }
+                    // 四个方向执行(回溯, 只要有一个返回了true,则后续的都不执行,使用||符号)
+                    check(x, y - 1, i + 1)      // 上
+                    check(x, y + 1, i + 1)      // 下
+                    check(x - 1, y, i + 1)      // 左
+                    check(x + 1, y, i + 1)      // 右
+                }
+            }
+
+            return res
+        };
+
+
+
+        let grid = [["A", "A", 'A']]
+        let grid2 = [["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]]
+        let grid3 = [["A", "B", "C", "E"], ["S", "F", "E", "S"], ["A", "D", "E", "E"]]
+        console.log(wordPuzzle(grid, "AAAA"));
+        console.log(wordPuzzle(grid2, "ABCB"));
+        console.log(wordPuzzle(grid3, "ABCESEEEFS"));
+    </script>
+</body>
+
+</html>
