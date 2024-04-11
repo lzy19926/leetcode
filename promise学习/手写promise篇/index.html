@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise封装 1-初始结构搭建</title>
+    <!-- // 引入自己手写的promise -->
+    <script src="./promise（函数版本实现）.js"></script>
+</head>
+
+<body>
+
+
+    <script>
+        let p = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject('Err')
+            }, 1000)
+        })
+
+        p.then(value => {
+            console.log('调用onResolved'+value);
+        }, reason => {
+            console.warn('调用onRejected'+reason);
+        })
+
+        // 测试链式promise
+        // 如下代码中    因为上方是resolve执行  ,所以没有定义onReject二号回调函数
+        // 而catch需要传递onReject进去,此时的回调函数数组中没有onReject函数 是undefined
+
+        // p1.then(value=>{
+        //       console.log('一号回调执行 resolve');
+        //   }).then(value=>{
+        //       console.log('二号回调执行 resolve');
+        //   }).then(value=>{
+        //       console.log('三号回调执行 resolve');
+        //   }) 
+
+        //   .catch(reason=>{
+        //       console.log('调用了catch');
+        //         console.warn(reason);
+        //     })
+
+
+
+        // console.log(p);
+
+        //  const p2 = Promise.resolve('resolve测试') // 传入其他值 直接返回resolve
+        //  const p3=Promise.resolve(p2) // 传入一个成功的promise ,返回一个成功的promise/传入失败的,返回失败的
+
+        //     console.log(p2);
+        //     console.log(p1);
+    </script>
+</body>
+
+</html>

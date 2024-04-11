@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+
+        const p = new Promise((resolve,reject)=>{
+            console.log('我会先执行');
+        })
+
+        console.log('我后执行');
+
+
+        // resolve测试
+        let p1 = Promise.resolve(111)
+        console.log(p1); // 返回一个promise对象  值为111  状态为resolve
+
+        // 传入一个promise对象
+        let p2=Promise.resolve(new Promise((resolve,reject)=>{
+            // 里面的Promise的结果  会成为外面promise的结果
+            resolve('OK')// P2的结果就是resolve  值为OK
+          
+            reject('Error')// p2结果为reject  值为Error
+     
+        }))
+
+        // . all测试
+        let pp1 = Promise.resolve('P1成功')
+        let pp2 = Promise.resolve('P2成功')
+        let pp3 = Promise.resolve('P3成功')
+
+        // .all方法传入一个由promise组成的数组
+        // 只有里面的promise对象结果都为成功时  all才会返回一个成功的promise 
+        const result = Promise.all([pp1,pp2,pp3])
+
+
+
+    </script>
+</body>
+</html>

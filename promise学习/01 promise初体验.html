@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初步体验promise</title>
+</head>
+<body>
+
+    <div class="container">
+        <button id="btn">点击抽奖</button>
+    </div>
+
+
+    <script>
+
+        //生成m-n之间的随机数
+        function addRandom(m,n){
+            let random = Math.ceil(Math.random()*(n-m+1))+m-1;
+            return random
+        }
+
+    
+    // -------------点击抽奖  百分之三十概率中奖----------------------
+        // const btn=document.querySelector('#btn')
+
+        // btn.addEventListener('click',function(){
+        //     // 百分之三十概率中将    计算方式  1-10随机数  命中1-3时中奖
+        //     // 生成1-100之间的随机数 
+        //     // 定时器 
+        //     setTimeout(function(){
+                
+        //         let n = addRandom(1,100)
+        //         console.log(n);
+        //         if(n<=30){
+        //             console.log('中奖');
+        //         }else{
+        //             console.log('未中奖');
+        //         }
+        //     },1000)
+            
+        // })
+
+        //-------------使用promise进行实现---------------------
+        btn.addEventListener('click',function(){
+           
+            // promise本质上是一个实例对象   里面传入两个参数
+            // resolve 解决 (是一个函数) 当异步任务成功的时候调用resolve
+            // reject 拒绝  (是一个函数) 异步任务失败的时候调用reject
+            const p = new Promise((resolve,reject)=>{
+               
+                //使用promise封装一个异步操作
+                setTimeout(function(){  
+                let n = addRandom(1,100)
+                console.log(n);
+                if(n<=50){
+                    console.log('中奖');
+                    resolve(n) // 调用resolve, 将promise对象的状态设置为成功(调用then的第一个回调)
+                }else{
+                    console.log('未中奖');
+                    reject(n) // 调用reject, 将promise对象的状态设置为失败(调用then的第二个回调)
+                }
+            },1000)
+            })
+
+        // 调用then方法 
+        // 在promise实例对象中有.then方法    里面传入两个(函数)参数 
+        // 函数一是对象成功时的回调(可通过resolve传参)
+        // 函数二时对象失败时的回调(可通过reject传参)
+        p.then(function(data){
+            console.log('then.中将,您的中奖数字为'+data);
+        },function(data){
+            console.log('then.未中奖,您的数数字为'+data);
+        })
+
+
+        console.log(p);
+        })
+        
+    </script>
+</body>
+</html>

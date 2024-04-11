@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+
+
+    <script>
+        // async和then方法的返回结果是一样的
+
+        async function mian(){
+            // 如果返回的书记是一个非promise对象
+            // 将返回值包装成一个promise对象 (返回一个成功的promise  值为521)
+            // return 521 
+            // 如果返回的是一个promise对象 
+            // 返回promise对象的结果由此promise决定 此时返回resolve
+            return new Promise((resolve,reject)=>{
+                resolve('OK')
+            })
+            // 如果抛出异常
+            // 返回一个reject的promise对象  状态为失败
+            throw 'oh NO'
+        }
+
+        let result = mian()   
+        console.log(result);
+
+        // 注意  await只能写在async函数中  但是async中可以没有await
+        // 如果await的promise状态是失败的    会抛出异常   需要通过try...catch进行捕获 
+
+
+
+        // await会返回async所包裹的promise对象的值 (如果promise成功)
+        let res =await main() // main返回promise对象 
+        console.log(res);  // 直接返回OK
+
+        // 如果包裹的是普通数据  直接返回数据 
+
+        // 如果await包裹的promise是失败的  需要使用try..catch进行错误捕获  
+        let p = new Promise((resolve,reject)=>{
+            reject('Err')
+        }) 
+        
+        try{ 
+            console.log(e);  // 拿到失败结果
+        }
+
+
+        setTimeout(()=>{
+            console.log('先等三秒');
+            setTimeout(()=>{
+                console.log('再等三秒');
+                setTimeout(()=>{
+                    console.log('又等三秒');
+
+                },3000)
+            },3000)
+        },3000)
+
+        // 使用then方法  链式执行回调函数
+        p.then(成功回调,失败回调).then(成功回调,失败回调).then(成功回调,失败回调)
+
+        async function f(){
+            const a= await fetch('http://...../post/1')
+            const b= await fetch('http://...../post/1')
+            // fetch操作用于发送请求  跟Axios和Ajax类似  返回一个promise对象
+            // 当我们需要同时发起两个或以上次数的请求时   如果在一个async中使用多个await  
+            // 就会打破两个请求的并行  (会先发送a再发送b,而不是同时走两条通道发送)
+
+            //更高效做法
+            // 使用.all将所有Promise组合起来  再去一并await   速度直接提升一倍
+            const [a,b] = await Promise.all([promiseA,promiseB])
+        }
+
+
+        console.log(1);
+
+        Promise.resolve('x').then(()=>{
+            console.log('t1');
+        }).then(()=>{
+            console.log('t2');
+        }).then(()=>{
+            console.log('t3');
+        })
+
+        setTimeout(()=>{
+            console.log(3);
+        })
+
+        console.log(2);
+
+
+
+    </script>
+</body>
+</html>

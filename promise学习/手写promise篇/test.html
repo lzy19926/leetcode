@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+        console.log(1);
+
+        Promise.resolve('OK').then(()=>{ // 默认resolve
+
+
+            setTimeout(()=>{
+            console.log(3);
+        })
+
+            console.log('t1');
+        }).then(()=>{ 
+            console.log('t2');
+        }).then(()=>{ 
+            console.log('t3');
+        })
+
+
+
+
+        console.log(2);
+
+
+        Promise.resolve('x').then(()=>{
+            console.log(1);
+        }).then(()=>{
+            console.log(3);
+        }).then(()=>{
+            console.log(5);
+        }).then(()=>{
+            console.log(7);
+        })
+        // 因为浏览器规定微任务可以插队   所以第一层then中的两个任务(1,2)会先执行
+        //之后再执行第二层任务(3,4)=>(5,6)=>(7,8)
+        Promise.resolve('x').then(()=>{
+            console.log(2);
+        }).then(()=>{
+            console.log(4);
+        }).then(()=>{
+            console.log(6);
+        }).then(()=>{
+            console.log(8);
+        })
+    </script>
+</body>
+</html>

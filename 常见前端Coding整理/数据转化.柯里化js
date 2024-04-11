@@ -1,0 +1,84 @@
+const util = require("util")
+
+//TODO 扁平数组转树结构 (每个节点已知parentID)
+const city = [
+  { "id": 12, "parent_id": 1, "name": "朝阳区" },
+  { "id": 31, "parent_id": 3, "name": "广州市" },
+  { "id": 13, "parent_id": 1, "name": "昌平区" },
+  { "id": 21, "parent_id": 2, "name": "静安区" },
+  { "id": 22, "parent_id": 2, "name": "黄浦区" },
+  { "id": 11, "parent_id": 1, "name": "顺义区" },
+  { "id": 2, "parent_id": 0, "name": "上海市" },
+  { "id": 24, "parent_id": 2, "name": "徐汇区" },
+  { "id": 1, "parent_id": 0, "name": "北京市" },
+  { "id": 32, "parent_id": 3, "name": "深圳市" },
+  { "id": 33, "parent_id": 3, "name": "东莞市" },
+  { "id": 3, "parent_id": 0, "name": "广东省" },
+  { "id": 99, "parent_id": 0, "name": "福建省" }
+]
+
+const result = [
+  {
+    id: 2,
+    parent_id: 0,
+    name: '上海市',
+    children: [
+      { id: 21, parent_id: 2, name: '静安区', children: [] },
+      { id: 22, parent_id: 2, name: '黄浦区', children: [] },
+      { id: 24, parent_id: 2, name: '徐汇区', children: [] }
+    ]
+  },
+  {
+    id: 1,
+    parent_id: 0,
+    name: '北京市',
+    children: [
+      { id: 12, parent_id: 1, name: '朝阳区', children: [] },
+      { id: 13, parent_id: 1, name: '昌平区', children: [] },
+      { id: 11, parent_id: 1, name: '顺义区', children: [] }
+    ]
+  },
+  {
+    id: 3,
+    parent_id: 0,
+    name: '广东省',
+    children: [
+      { id: 31, parent_id: 3, name: '广州市', children: [] },
+      { id: 32, parent_id: 3, name: '深圳市', children: [] },
+      { id: 33, parent_id: 3, name: '东莞市', children: [] }
+    ]
+  }
+]
+
+// 思路 递归 每次收集一个parent的所有节点
+// 优化方案  逐渐减少list总数 使用打tag的方式
+function arrayToTreeV3(list, root) {
+  return list
+    .filter(item => item.parent_id === root)
+    .map(item => ({ ...item, children: arrayToTreeV3(list, item.id) }))
+}
+
+const res = arrayToTreeV3(city, 0)
+console.log(util.inspect(res, false, null, true));
+
+
+
+//TODO 函数柯里化
+// 当函数传入参数时,我们不进行求值,而是将参数保存起来 // 主要通过闭包进行保存
+function curry(fn) {
+  let args = []
+
+  return function () {
+    if (arguments.length === 0) {
+      return fn.apply(this, args)
+    } else {
+      args.push(...arguments)
+      return arguments.callee //直接返回当前函数指针
+    }
+  }
+}
+
+// ES6实现柯里化
+function curry(fn, ...args) {
+  return fn.length <= args.length ? fn(...args) : curry.bind(null, fn, ...args);
+}

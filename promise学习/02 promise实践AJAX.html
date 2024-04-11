@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>promise实现AJAX</title>
+</head>
+<body>
+
+    <button class="btn" id="btn">点击发送Ajax</button>
+
+    <script>
+        // 接口地址 https://api.apiopen.top/getJoke
+        // 获取元素对象 
+        const btn = document.querySelector('#btn')
+        // 调用Ajax
+       
+       
+        btn.addEventListener('click',function(){
+            // 使用promise进行封装 
+            const p = new Promise((resolve,reject)=>{
+
+            // 创建ajax对象 进行请求
+            const xhr= new XMLHttpRequest();
+            // 初始化
+            xhr.open('GET','https://api.apiopen.top/getJoke')
+            // 发送
+            xhr.send()
+            // 处理响应结果 (当state改变时)
+            xhr.onreadystatechange = function(data){
+                if(xhr.readyState === 4){
+                    // 判断响应状态码state  如果响应码是2xx
+                    if(xhr.status>=200 && xhr.status<=300){
+                        // 控制台输出响应体 
+                        console.log(xhr.response);
+                        resolve(xhr.response)// 成功调用回调1
+                    }else{
+                        console.log('获取失败'+xhr.status);
+                        reject(xhr.status) // 失败调用回调2
+                    }
+                }
+            }
+        })
+
+
+            p.then(
+                 function(value){},
+                 function(value){ console.log('then获取失败'+value); })
+
+
+            })
+
+
+            function testFunc() { 
+                //函数直接返回一个封装好的promise对象
+                return new Promise((rosolve,reject)=>{
+                    
+                    //promise中封装一个异步操作
+                    setTimeout(function(){
+                        resolve() 
+                    console.log('1s后打印此句子');
+                        reject()
+                },1000)
+
+                }) 
+             }
+             
+             // 因为函数返回一个promise对象  我们可以直接在函数调用后使用.then
+             // 进行resolve和reject的配置 
+             testFunc().then(function(){},function(){})
+
+    </script>
+    
+</body>
+</html>
